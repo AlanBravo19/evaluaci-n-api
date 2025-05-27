@@ -1,5 +1,7 @@
 package com.edutech.evaluaciones.service;
 
+import com.edutech.evaluaciones.client.ContenidoClient;
+import com.edutech.evaluaciones.dto.ContenidoDTO;
 import com.edutech.evaluaciones.model.Evaluacion;
 import com.edutech.evaluaciones.repository.EvaluacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ public class EvaluacionService {
 
     @Autowired
     private EvaluacionRepository evaluacionRepository;
+
+    @Autowired
+    private ContenidoClient contenidoClient;
 
     // Guardar una nueva evaluación
     public Evaluacion guardarEvaluacion(Evaluacion evaluacion) {
@@ -28,6 +33,21 @@ public class EvaluacionService {
     public Optional<Evaluacion> obtenerPorId(Long id) {
         return evaluacionRepository.findById(id);
     }
+
+
+    public ContenidoDTO obtenerContenidoPorId(Long contenidoId) {
+    return contenidoClient.obtenerContenidoPorId(contenidoId);
+}
+
+
+    public ContenidoDTO obtenerContenidoDeEvaluacion(Long evaluacionId) {
+    Optional<Evaluacion> opt = evaluacionRepository.findById(evaluacionId);
+    if (opt.isPresent()) {
+        Long contenidoId = opt.get().getContenidoId();
+        return contenidoClient.obtenerContenidoPorId(contenidoId);
+    }
+    return null; // o lanzar excepción
+}
 
     // Actualizar una evaluación
     public Evaluacion actualizarEvaluacion(Long id, Evaluacion nuevaEvaluacion) {
