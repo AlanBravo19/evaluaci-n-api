@@ -9,12 +9,12 @@ public class ContenidoDTO {
     private String descripcion;
     private String tipo;
     private String url;
-    // agregar otros campos que consideres
+    
 
-    // Constructor vacío (requerido para Jackson)
+   
     public ContenidoDTO() {}
 
-    // Getters y setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

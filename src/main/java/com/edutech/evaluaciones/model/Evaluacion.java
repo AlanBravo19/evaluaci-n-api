@@ -16,8 +16,8 @@ public class Evaluacion {
 
     private String titulo;
     private String descripcion;
-    private String tipo; // por ejemplo: prueba, control, quiz
+    private String tipo; 
     private int puntajeMaximo;
 
-    private Long contenidoId;  // Relación al contenido
+    private Long contenidoId;  
 }

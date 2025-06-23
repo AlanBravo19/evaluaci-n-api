@@ -13,5 +13,5 @@ public class EvaluacionConContenidoDTO {
     private String descripcion;
     private String tipo;
     private Integer puntajeMaximo;
-    private ContenidoDTO contenido;  // asumiendo que ContenidoDTO ya lo tienes creado
+    private ContenidoDTO contenido;  
 }
