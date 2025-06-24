@@ -91,6 +91,38 @@ public class EvaluacionControllerTest {
     }
 
 
+@Test
+public void testActualizarEvaluacion() throws Exception {
+    Evaluacion actualizada = new Evaluacion();
+    actualizada.setId(1L);
+    actualizada.setTitulo("Evaluación Actualizada");
+    actualizada.setDescripcion("Descripción actualizada");
+    actualizada.setTipo("examen");
+    actualizada.setPuntajeMaximo(90);
+    actualizada.setContenidoId(5L);
+
+    Mockito.when(evaluacionService.actualizarEvaluacion(Mockito.eq(1L), any(Evaluacion.class)))
+            .thenReturn(actualizada);
+
+    String jsonActualizada = objectMapper.writeValueAsString(actualizada);
+
+    mockMvc.perform(put("/api/evaluaciones/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonActualizada))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.titulo", is("Evaluación Actualizada")))
+            .andExpect(jsonPath("$.puntajeMaximo", is(90)));
+}
+
+@Test
+public void testEliminarEvaluacion() throws Exception {
+    // No hace falta que el servicio retorne nada. Solo verificamos que responda OK.
+    Mockito.doNothing().when(evaluacionService).eliminarEvaluacion(1L);
+
+    mockMvc.perform(delete("/api/evaluaciones/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", is("Evaluación eliminada correctamente")));
+}
 
    
 }

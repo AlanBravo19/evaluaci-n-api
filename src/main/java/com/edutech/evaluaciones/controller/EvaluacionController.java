@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.edutech.evaluaciones.dto.ContenidoDTO;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.hateoas.CollectionModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -61,6 +62,25 @@ public EntityModel<ContenidoDTO> obtenerContenidoDeEvaluacion(@PathVariable Long
 //public ContenidoDTO obtenerContenidoDeEvaluacion(@PathVariable Long id) {
   //  return evaluacionService.obtenerContenidoDeEvaluacion(id);
 //}
+
+@PutMapping("/{id}")
+public EntityModel<Evaluacion> actualizarEvaluacion(@PathVariable Long id, @RequestBody Evaluacion nuevaEvaluacion) {
+    Evaluacion actualizada = evaluacionService.actualizarEvaluacion(id, nuevaEvaluacion);
+    
+    if (actualizada == null) {
+        throw new RuntimeException("Evaluación no encontrada con id: " + id);
+    }
+
+    return EntityModel.of(actualizada,
+            linkTo(methodOn(EvaluacionController.class).actualizarEvaluacion(id, nuevaEvaluacion)).withSelfRel(),
+            linkTo(methodOn(EvaluacionController.class).listarEvaluaciones()).withRel("evaluaciones"));
+}
+
+@DeleteMapping("/{id}")
+public ResponseEntity<String> eliminarEvaluacion(@PathVariable Long id) {
+    evaluacionService.eliminarEvaluacion(id);
+    return ResponseEntity.ok("Evaluación eliminada correctamente");
+}
 
 
 
