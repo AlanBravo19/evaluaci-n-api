@@ -42,11 +42,15 @@ public CollectionModel<EntityModel<Evaluacion>> listarEvaluaciones() {
     //    return evaluacionService.obtenerTodas();
     //}
 
-    @PostMapping
-    public Evaluacion crearEvaluacion(@RequestBody Evaluacion evaluacion) {
-        return evaluacionService.guardarEvaluacion(evaluacion);
-    }
+   @PostMapping
+public EntityModel<Evaluacion> crearEvaluacion(@RequestBody Evaluacion evaluacion) {
+    Evaluacion nuevaEvaluacion = evaluacionService.guardarEvaluacion(evaluacion);
 
+    return EntityModel.of(nuevaEvaluacion,
+        linkTo(methodOn(EvaluacionController.class).obtenerContenidoDeEvaluacion(nuevaEvaluacion.getId())).withRel("contenido"),
+        linkTo(methodOn(EvaluacionController.class).listarEvaluaciones()).withRel("evaluaciones"),
+        linkTo(methodOn(EvaluacionController.class).crearEvaluacion(evaluacion)).withSelfRel());
+}
 
     @GetMapping("/{id}/contenido")
 public EntityModel<ContenidoDTO> obtenerContenidoDeEvaluacion(@PathVariable Long id) {
@@ -75,11 +79,10 @@ public EntityModel<Evaluacion> actualizarEvaluacion(@PathVariable Long id, @Requ
             linkTo(methodOn(EvaluacionController.class).actualizarEvaluacion(id, nuevaEvaluacion)).withSelfRel(),
             linkTo(methodOn(EvaluacionController.class).listarEvaluaciones()).withRel("evaluaciones"));
 }
-
 @DeleteMapping("/{id}")
-public ResponseEntity<String> eliminarEvaluacion(@PathVariable Long id) {
+public ResponseEntity<Void> eliminarEvaluacion(@PathVariable Long id) {
     evaluacionService.eliminarEvaluacion(id);
-    return ResponseEntity.ok("Evaluación eliminada correctamente");
+    return ResponseEntity.noContent().build(); 
 }
 
 
